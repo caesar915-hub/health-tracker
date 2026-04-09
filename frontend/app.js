@@ -42,3 +42,94 @@ metricsForm.addEventListener('submit', async (e) => {
         alert("Error saving data. Check console.");
     }
 });
+
+// 3. The Chart Logic
+let healthChart; // We store the chart here so we can refresh it
+
+async function loadChartData() {
+    const response = await fetch('/logs');
+    const data = await response.json();
+
+    // If there is no data, don't try to draw a chart
+    if (!data || data.length === 0) return;
+
+    // Prepare labels (Dates) and datasets (Scores)
+    const labels = data.map(item => item.entry_date.split('T')[0]); // Clean up the date string
+    const sleepData = data.map(item => item.sleep_quality);
+    const focusData = data.map(item => item.focus);
+    const energyData = data.map(item => item.physical_energy);
+    const motivationData = data.map(item => item.motivation);
+    const pastViewData = data.map(item => item.past_view);  
+    const socialData = data.map(item => item.social_activity);
+
+
+    const ctx = document.getElementById('healthChart').getContext('2d');
+
+    // If a chart already exists, destroy it before making a new one (to avoid glitches)
+    if (healthChart) healthChart.destroy();
+
+    healthChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+            {
+                    label: 'Sleep Quality',
+                    data: sleepData,
+                    borderColor: '#2ecc71',
+                    tension: 0.3,
+                    fill: false
+                },
+                {
+                    label: 'Focus',
+                    data: focusData,
+                    borderColor: '#3498db',
+                    tension: 0.3,
+                    fill: false
+                },
+                {
+                    label: 'Physical Energy',
+                    data: energyData,
+                    borderColor: '#e74c3c',
+                    tension: 0.3,
+                    fill: false
+                },
+                {
+                    label: 'Motivation',
+                    data: motivationData,
+                    borderColor: '#9b59b6',
+                    tension: 0.3,
+                    fill: false
+                },
+                {
+                    label: 'Past View',
+                    data: pastViewData,
+                    borderColor: '#f39c12',
+                    tension: 0.3,
+                    fill: false
+                },
+                {
+                    label: 'Social Activity',
+                    data: socialData,
+                    borderColor: '#16a085',
+                    tension: 0.3,
+                    fill: false
+                }
+
+                
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    min: -3,
+                    max: 3,
+                    ticks: { stepSize: 1 }
+                }
+            }
+        }
+    });
+}
+
+// Run this when the page first loads
+loadChartData();
