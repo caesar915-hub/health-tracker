@@ -15,7 +15,7 @@ body {
     width: 100%;
 }
 
-h1 { color: #2c3e50; text-align: center; }
+h1 { color: #27ae60; text-align: center; }
 
 .slider-container {
     margin-bottom: 20px;
@@ -36,7 +36,7 @@ input[type="range"] {
 button {
     width: 100%;
     padding: 12px;
-    background-color: #3498db;
+    background-color: #27ae60;
     color: white;
     border: none;
     border-radius: 6px;
@@ -45,6 +45,6 @@ button {
     transition: background 0.3s;
 }
 
-button:hover { background-color: #2980b9; }
+button:hover { background-color: #219a52; }
 
 hr { margin: 40px 0; border: 0; border-top: 1px solid #eee; }
