@@ -1,24 +1,37 @@
 services:
   db:
     image: postgres:15-alpine
-    # ... (same as before) ...
+    container_name: health_db
+    environment:
+      - POSTGRES_USER=user_admin
+      - POSTGRES_PASSWORD=secret_password
+      - POSTGRES_DB=health_tracker_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user_admin -d health_tracker_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   backend:
     build: .
-    # REMOVE the ports: - "8080:8080" section! 
-    # We want the backend to be "private" inside the Docker network.
+    container_name: health_backend
     environment:
-      DB_URL: "postgres://user_admin:secret_password@db:5432/health_tracker_db?sslmode=disable"
+      - DB_URL=postgres://user_admin:secret_password@db:5432/health_tracker_db?sslmode=disable
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   nginx:
     image: nginx:alpine
     container_name: health_proxy
     volumes:
-      - ./frontend:/usr/share/nginx/html:ro # Mount your HTML here
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro # Mount config
+      - ./frontend:/usr/share/nginx/html:ro
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
-      - "80:80" # Standard web port
+      - "80:80"
     depends_on:
       - backend

@@ -1,5 +1,5 @@
 # STAGE 1: Build the binary
-FROM golang:1.21-alpine AS builder
+FROM golang:alpine AS builder
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -12,7 +12,7 @@ RUN go mod download
 COPY backend/ .
 
 # Build the app into a static binary called "server"
-RUN CGO_ENABLED=0 GOOS=linux go build -o /server main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -o /server .
 
 # STAGE 2: Run the binary
 FROM alpine:latest
