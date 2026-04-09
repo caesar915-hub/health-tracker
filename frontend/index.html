@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Health Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Daily Health Tracker</h1>
+
+        <section class="form-section">
+            <form id="metricsForm">
+                <div class="input-group">
+                    <label for="entry_date">Date:</label>
+                    <input type="date" id="entry_date" required>
+                </div>
+
+                <div class="slider-container">
+                    <label>Sleep Quality (-3 to 3): <span id="val-sleep">0</span></label>
+                    <input type="range" id="sleep_quality" min="-3" max="3" value="0">
+                </div>
+
+                <div class="slider-container">
+                    <label>Physical Energy: <span id="val-energy">0</span></label>
+                    <input type="range" id="physical_energy" min="-3" max="3" value="0">
+                </div>
+
+                <div class="slider-container">
+                    <label>Focus: <span id="val-focus">0</span></label>
+                    <input type="range" id="focus" min="-3" max="3" value="0">
+                </div>
+
+                <div class="slider-container">
+                    <label>Motivation: <span id="val-motivation">0</span></label>
+                    <input type="range" id="motivation" min="-3" max="3" value="0">
+                </div>
+
+                <div class="slider-container">
+                    <label>Past View: <span id="val-past">0</span></label>
+                    <input type="range" id="past_view" min="-3" max="3" value="0">
+                </div>
+
+                <div class="slider-container">
+                    <label>Social Activity: <span id="val-social">0</span></label>
+                    <input type="range" id="social_activity" min="-3" max="3" value="0">
+                </div>
+
+                <button type="submit" id="submitBtn">Save Entry</button>
+            </form>
+        </section>
+
+        <hr>
+
+        <section class="chart-section">
+            <h2>Last 30 Days</h2>
+            <canvas id="healthChart"></canvas>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
+</body>
+</html> 
+
