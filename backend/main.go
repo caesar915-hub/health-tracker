@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
@@ -105,7 +106,12 @@ func createLogHandler(w http.ResponseWriter, r *http.Request) {
 // --- FUNCTION 3: The "Main" Engine ---
 func main() {
 	var err error
-	connStr := "postgres://user_admin:secret_password@localhost:5432/health_tracker_db?sslmode=disable"
+
+	connStr := os.Getenv("DB_URL")
+	if connStr == "" {
+		// Fallback for local testing outside Docker
+		connStr = "postgres://user_admin:secret_password@localhost:5432/health_tracker_db?sslmode=disable"
+	}
 
 	// 1. Initialize the Database Connection - GO METHOD 1: sql.Open
 	// We use the global 'db' variable we declared at the top.

@@ -1,24 +1,24 @@
 services:
   db:
-    # Use the lightweight Alpine version of Postgres
     image: postgres:15-alpine
-    container_name: daily_tracker_db
-    
-    # Environment variables set the DB credentials
-    environment:
-      POSTGRES_USER: user_admin
-      POSTGRES_PASSWORD: secret_password
-      POSTGRES_DB: health_tracker_db
-    
-    # Maps Port 5432 on your laptop to Port 5432 inside the container
-    ports:
-      - "5432:5432"
-    
-    # This is the "Magic" link to your SQL file
-    volumes:
-      - ./db-init/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - postgres_storage:/var/lib/postgresql/data
+    # ... (same as before) ...
 
-# This ensures your data survives if you stop the container
-volumes:
-  postgres_storage:
+  backend:
+    build: .
+    # REMOVE the ports: - "8080:8080" section! 
+    # We want the backend to be "private" inside the Docker network.
+    environment:
+      DB_URL: "postgres://user_admin:secret_password@db:5432/health_tracker_db?sslmode=disable"
+    depends_on:
+      - db
+
+  nginx:
+    image: nginx:alpine
+    container_name: health_proxy
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro # Mount your HTML here
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro # Mount config
+    ports:
+      - "80:80" # Standard web port
+    depends_on:
+      - backend
