@@ -17,3 +17,4 @@ CREATE TABLE IF NOT EXISTS daily_metrics (
     -- This helps you see exactly when the entry was physically created
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+

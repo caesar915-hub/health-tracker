@@ -27,7 +27,7 @@ func getLogsHandler(w http.ResponseWriter, r *http.Request) {
 // --- FUNCTION 2: The "Main" Engine ---
 func main() {
 	var err error
-	connStr := "postgres://user_admin:secret_password@localhost:5432/health_tracker_db"
+	connStr := "postgres://user_admin:secret_password@localhost:5432/health_tracker_db?sslmode=disable"
 
 	// 1. Initialize the Database Connection
 	// We use the global 'db' variable we declared at the top.
