@@ -11,6 +11,12 @@ const sliders = [
 const form = document.getElementById('metricsForm');
 const submitBtn = document.getElementById('submitBtn');
 
+const dateDiv = document.createElement('div');
+dateDiv.className = 'input-group';
+dateDiv.innerHTML = `<label for="entry_date">Date:</label>
+    <input type="date" id="entry_date" required>`;
+form.insertBefore(dateDiv, submitBtn);
+
 sliders.forEach(({ id, label, valId }) => {
     const div = document.createElement('div');
     div.className = 'slider-container';
