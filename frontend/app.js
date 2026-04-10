@@ -1,13 +1,29 @@
-// 1. Make the slider numbers update live
+// 1. Inject sliders into the form
+const sliders = [
+    { id: 'sleep_quality',   label: 'Sleep Quality (-3 to 3)', valId: 'val-sleep' },
+    { id: 'physical_energy', label: 'Physical Energy',         valId: 'val-energy' },
+    { id: 'focus',           label: 'Focus',                   valId: 'val-focus' },
+    { id: 'motivation',      label: 'Motivation',              valId: 'val-motivation' },
+    { id: 'past_view',       label: 'Past View',               valId: 'val-past' },
+    { id: 'social_activity', label: 'Social Activity',         valId: 'val-social' },
+];
+
+const form = document.getElementById('metricsForm');
+const submitBtn = document.getElementById('submitBtn');
+
+sliders.forEach(({ id, label, valId }) => {
+    const div = document.createElement('div');
+    div.className = 'slider-container';
+    div.innerHTML = `<label>${label}: <span id="${valId}">0</span></label>
+        <input type="range" id="${id}" min="-3" max="3" value="0">`;
+    form.insertBefore(div, submitBtn);
+});
+
+const valIdMap = Object.fromEntries(sliders.map(s => [s.id, s.valId]));
+
 document.querySelectorAll('input[type="range"]').forEach(slider => {
     slider.addEventListener('input', (e) => {
-        // This finds the span next to the label and updates the text
-        const spanId = "val-" + e.target.id.split('_')[0]; 
-        // Note: I used a shortcut here, but for your specific IDs:
-        if(e.target.id === "past_view") document.getElementById("val-past").innerText = e.target.value;
-        else if(e.target.id === "social_activity") document.getElementById("val-social").innerText = e.target.value;
-        else if(e.target.id === "physical_energy") document.getElementById("val-energy").innerText = e.target.value;
-        else document.getElementById("val-" + e.target.id.split('_')[0]).innerText = e.target.value;
+        document.getElementById(valIdMap[e.target.id]).innerText = e.target.value;
     });
 });
 
