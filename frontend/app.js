@@ -75,6 +75,15 @@ async function loadChartData() {
     // If there is no data, don't try to draw a chart
     if (!data || data.length === 0) return;
 
+    // Pre-fill form with last entry values
+    const last = data[data.length - 1];
+    document.getElementById('entry_date').value = last.entry_date.split('T')[0];
+    sliders.forEach(({ id, valId }) => {
+        const val = last[id] ?? 0;
+        document.getElementById(id).value = val;
+        document.getElementById(valId).innerText = val;
+    });
+
     // Prepare labels (Dates) and datasets (Scores)
     const labels = data.map(item => item.entry_date.split('T')[0]); // Clean up the date string
     const sleepData = data.map(item => item.sleep_quality);
